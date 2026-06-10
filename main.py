@@ -4,9 +4,13 @@ from app.api.inventory.routes import router as inventory_router
 from app.api.orders.routes import router as order_router
 from app.api.vendors.routes import router as vendor_router
 from app.api.customers.routes import router as customer_router
-
 from app.api.products.routes import router as product_router
 from app.api.categories.routes import router as category_router
+from app.api.wallets.routes import router as wallet_router
+
+from app.api.payments.routes import router as payment_router
+from app.api.notifications.routes import router as notification_router
+from app.api.shipping.routes import router as shipping_router
 
 app = FastAPI(
     title="Raritone Backend"
@@ -24,8 +28,18 @@ app.include_router(vendor_router)
 # Customer Module
 app.include_router(customer_router)
 
+# Product & Category
 app.include_router(product_router)
 app.include_router(category_router)
+
+# Wallet Module
+app.include_router(wallet_router)
+
+# New Modules
+app.include_router(payment_router)
+app.include_router(notification_router)
+app.include_router(shipping_router)
+
 
 @app.get("/")
 def home():
