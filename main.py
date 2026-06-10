@@ -1,12 +1,9 @@
 from fastapi import FastAPI
 
-app = FastAPI(
-    title="Raritone Backend",
-    version="1.0.0"
-)
+from app.api.vendors.routes import router as vendor_router
+from app.api.customers.routes import router as customer_router
 
-@app.get("/")
-def home():
-    return {
-        "message": "Raritone Backend Running"
-    }
+app = FastAPI(title="Raritone Backend")
+
+app.include_router(vendor_router)
+app.include_router(customer_router)
