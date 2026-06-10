@@ -1,7 +1,17 @@
-from sqlalchemy import Column, Integer, String, Float, ForeignKey
+from datetime import datetime
+
+from sqlalchemy import (
+    Column,
+    Integer,
+    String,
+    Float,
+    ForeignKey,
+    DateTime
+)
 from sqlalchemy.orm import relationship
 
 from app.database.base import Base
+
 
 class Product(Base):
     __tablename__ = "products"
@@ -16,8 +26,27 @@ class Product(Base):
 
     image_url = Column(String(500))
 
-    category_id = Column(Integer, ForeignKey("categories.id"))
+    category_id = Column(
+        Integer,
+        ForeignKey("categories.id")
+    )
 
     variant = Column(String(100))
+
+    status = Column(
+        String(20),
+        default="active"
+    )
+
+    created_at = Column(
+        DateTime,
+        default=datetime.utcnow
+    )
+
+    updated_at = Column(
+        DateTime,
+        default=datetime.utcnow,
+        onupdate=datetime.utcnow
+    )
 
     category = relationship("Category")
