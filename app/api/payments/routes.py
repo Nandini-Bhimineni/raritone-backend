@@ -126,3 +126,4 @@ def total_payouts(): return service.get_total_payouts_sum()
 
 @router.get("/total-refunds")
 def total_refunds(): return service.get_total_refunds_sum()
+
