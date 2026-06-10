@@ -65,14 +65,20 @@ def create_user(user):
         "full_name": user.full_name,
         "email": user.email,
         "password": hash_password(
-            user.password
+              user.password
         ),
+        "role": "customer",
         "is_verified": False,
+        "is_active": True,
         "otp": otp,
         "created_at": datetime.now().strftime(
             "%Y-%m-%d %H:%M:%S"
+        ),
+        "updated_at": datetime.now().strftime(
+            "%Y-%m-%d %H:%M:%S"
         )
     }
+    
 
     users.append(new_user)
 
@@ -92,6 +98,10 @@ def login_user(data):
     for user in users:
 
         if user["email"] == data.email:
+            if not user.get("is_verified",False):
+                return{
+                    "error":"Please verify OTP first"
+                }
 
             if not verify_password(
                 data.password,
@@ -129,6 +139,9 @@ def verify_otp(data):
                 }
 
             user["is_verified"] = True
+            user["updated_at"]=datetime.now().strftime(
+                "%Y=%m-%d %H:%M:%S"
+            )
 
             return {
                 "message": "OTP verified successfully"
@@ -148,6 +161,9 @@ def reset_password(data):
             user["password"] = hash_password(
                 data.new_password
             )
+            user["updated_at"]=datetime.now().strftime(
+                "%Y=%m-%d %H:%M:%S"
+            )
 
             return {
                 "message": "Password reset successful"
@@ -159,4 +175,80 @@ def reset_password(data):
 
 
 def get_all_users():
-    return users
+
+    safe_users = []
+
+    for user in users:
+
+        safe_users.append(
+            {
+                "id": user["id"],
+                "full_name": user["full_name"],
+                "email": user["email"],
+                "role": user.get("role", "customer"),
+                "is_verified": user["is_verified"],
+                "is_active": user.get("is_active", True),
+                "created_at": user.get("created_at"),
+                "updated_at": user.get("updated_at")
+            }
+        )
+
+    return safe_users
+
+
+def resend_otp(email):
+
+    for user in users:
+
+        if user["email"] == email:
+
+            otp = str(
+                random.randint(
+                    100000,
+                    999999
+                )
+            )
+
+            user["otp"] = otp
+
+            user["updated_at"] = datetime.now().strftime(
+                "%Y-%m-%d %H:%M:%S"
+            )
+
+            return {
+                "message": "OTP resent successfully",
+                "otp": otp
+            }
+
+    return {
+        "error": "User not found"
+    }
+
+
+def get_user(email):
+
+    for user in users:
+
+        if user["email"] == email:
+
+            return {
+                "id": user["id"],
+                "full_name": user["full_name"],
+                "email": user["email"],
+                "role": user.get("role", "customer"),
+                "is_verified": user["is_verified"],
+                "is_active": user.get("is_active", True),
+                "created_at": user.get("created_at"),
+                "updated_at": user.get("updated_at")
+            }
+
+    return {
+        "error": "User not found"
+    }
+
+
+def get_user_count():
+
+    return {
+        "total_users": len(users)
+    }
