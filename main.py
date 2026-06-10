@@ -11,6 +11,8 @@ from app.api.notifications.routes import (
     router as notification_router
 )
 
+from app.api.payments.routes import router as payments_router
+
 app = FastAPI(
     title="Raritone Backend"
 )
@@ -33,6 +35,8 @@ app.include_router(category_router)
 app.include_router(
     notification_router
 )
+
+app.include_router(payments_router)
 
 @app.get("/")
 def home():
