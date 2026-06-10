@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from datetime import datetime
 
 
 class VendorCreate(BaseModel):
@@ -6,6 +7,10 @@ class VendorCreate(BaseModel):
     email: str
     phone: str
     address: str
+    vendor_status: str = "Pending"
+    created_at: str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    updated_at: str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
 
 
 class VendorUpdate(BaseModel):
@@ -23,6 +28,10 @@ class VendorResponse(BaseModel):
     id: int
     vendor_name: str
     email: str
+    vendor_status: str
+    is_verified: bool
+    created_at: str
+    updated_at: str
 
     class Config:
         from_attributes = True

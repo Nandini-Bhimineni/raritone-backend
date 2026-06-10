@@ -7,6 +7,9 @@ class CustomerCreate(BaseModel):
     phone: str
     address: str
 
+    customer_status: str = "Active"
+    total_orders: int = 0
+
 
 class CustomerUpdate(BaseModel):
     name: str | None = None

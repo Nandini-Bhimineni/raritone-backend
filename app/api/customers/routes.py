@@ -60,6 +60,21 @@ def edit_customer(
 
     return updated
 
+@router.get("/{customer_id}/orders")
+def customer_orders(customer_id: int):
+    return {
+        "customer_id": customer_id,
+        "orders": []
+    }
+
+
+@router.get("/{customer_id}/reviews")
+def customer_reviews(customer_id: int):
+    return {
+        "customer_id": customer_id,
+        "reviews": []
+    } 
+
 
 @router.delete("/{customer_id}")
 def remove_customer(customer_id: int):
