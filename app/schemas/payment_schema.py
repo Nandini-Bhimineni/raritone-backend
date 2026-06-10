@@ -1,20 +1,39 @@
 from pydantic import BaseModel, Field
-from datetime import datetime
+from typing import Literal, Optional
 
+# --- WALLET SCHEMAS ---
 class WalletCreate(BaseModel):
     customer_id: int
     initial_balance: float = Field(default=0.0, ge=0.0)
 
 class WalletAmountUpdate(BaseModel):
     customer_id: int
-    amount: float = Field(..., gt=0.0, description="Amount must be greater than zero")
+    amount: float = Field(..., gt=0.0)
 
-class WalletResponse(BaseModel):
-    id: int
-    customer_id: int
-    balance: float
-    created_at: str
-    updated_at: str
+# --- TRANSACTION SCHEMAS ---
+class TransactionCreate(BaseModel):
+    customer_id: Optional[int] = None
+    vendor_id: Optional[int] = None
+    amount: float = Field(..., gt=0.0)
+    payment_method: Literal["Wallet", "UPI", "Credit Card", "Debit Card", "Net Banking", "Cash On Delivery"]
+    status: Literal["Pending", "Success", "Failed"] = "Pending"
+    reference_number: Optional[str] = None
+    remarks: Optional[str] = None
 
-    class Config:
-        from_attributes = True
+# --- SETTLEMENT SCHEMAS ---
+class SettlementCreate(BaseModel):
+    vendor_id: int
+    amount: float = Field(..., gt=0.0)
+    remarks: Optional[str] = None
+
+# --- PAYOUT SCHEMAS ---
+class PayoutCreate(BaseModel):
+    vendor_id: int
+    amount: float = Field(..., gt=0.0)
+    remarks: Optional[str] = None
+
+# --- REFUND SCHEMAS ---
+class RefundCreate(BaseModel):
+    transaction_id: str
+    amount: float = Field(..., gt=0.0)
+    remarks: Optional[str] = None
