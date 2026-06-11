@@ -6,3 +6,8 @@ python-jose
 passlib[bcrypt]
 python-multipart
 pydantic
+email-validator
+bcrypt
+python-dotenv
+alembic
+fastapi-mail
